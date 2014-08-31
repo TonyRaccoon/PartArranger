@@ -44,7 +44,6 @@ namespace TonyPartArranger
         private Boolean isButtonDelayed = true;
         private String tooltipText = "";
         public List<PartCategories> validCategories = new List<PartCategories>();
-        private Boolean usingBlizzyToolbar = true;
         private Boolean usingBlizzyToolbar_AndAvailable = true; // Track enabled and "enabled and available" state separately so config value doesn't change to false if it's not available
         private IButton blizzyButton;
         private ApplicationLauncherButton appButton;
@@ -54,6 +53,7 @@ namespace TonyPartArranger
         private int originalWindowHeight;
         private int originalMousePosition;
         private bool resizing = false;
+        private Dictionary<String, object> settings = new Dictionary<String, object>();
 
         private static List<AvailablePart> stockPartList;
 
@@ -110,7 +110,7 @@ namespace TonyPartArranger
             GameEvents.onGUIAstronautComplexSpawn.Add(OnAstroComplexShown);
             GameEvents.onGUIAstronautComplexDespawn.Add(OnAstroComplexHidden);
 
-            if (usingBlizzyToolbar && ToolbarManager.ToolbarAvailable)
+            if ((Boolean)settings["UseBlizzyToolbar"] && ToolbarManager.ToolbarAvailable)
                 usingBlizzyToolbar_AndAvailable = true;
             else
                 usingBlizzyToolbar_AndAvailable = false;

@@ -83,23 +83,22 @@ namespace TonyPartArranger
         /// </summary>
         public void SaveSettings()
         {
-            ConfigNode settings = new ConfigNode();
+            ConfigNode node = new ConfigNode();
 
-            settings.AddValue("WindowX", windowRect.xMin);
-            settings.AddValue("WindowY", windowRect.yMin);
-            settings.AddValue("WindowHeight", windowRect.height);
-            settings.AddValue("WindowLocked", windowLocked);
-            settings.AddValue("WindowShown", windowShown);
-            settings.AddValue("UseBlizzyToolbar", usingBlizzyToolbar);
-            
+            node.AddValue("WindowX", windowRect.xMin);
+            node.AddValue("WindowY", windowRect.yMin);
+            node.AddValue("WindowHeight", windowRect.height);
+            node.AddValue("WindowLocked", windowLocked);
+            node.AddValue("WindowShown", windowShown);
+            node.AddValue("UseBlizzyToolbar", settings["UseBlizzyToolbar"]);
 
             foreach (PartCategories category in validCategories)
             {
                 foreach (SortedPart part in SortedPart.FindByCategory(category))
-                    settings.AddValue(category.ToString(), part.Name);
+                    node.AddValue(category.ToString(), part.Name);
             }
 
-            settings.Save(KSPUtil.ApplicationRootPath + "GameData/" + pluginDir + "/config.txt");
+            node.Save(KSPUtil.ApplicationRootPath + "GameData/" + pluginDir + "/config.txt");
         }
 
         /// <summary>
@@ -109,28 +108,28 @@ namespace TonyPartArranger
         {
             try // ConfigNode.Load throws a NullReferenceException on a missing or blank file
             {
-                ConfigNode settings = ConfigNode.Load(KSPUtil.ApplicationRootPath + "Gamedata/" + pluginDir + "/config.txt");
+                ConfigNode node = ConfigNode.Load(KSPUtil.ApplicationRootPath + "Gamedata/" + pluginDir + "/config.txt");
                 String readValue;
 
-                readValue = settings.GetValue("UseBlizzyToolbar");
+                readValue = node.GetValue("UseBlizzyToolbar");
                 if (readValue != null && readValue.ToLower() == "true")
-                    usingBlizzyToolbar = true;
+                    settings["UseBlizzyToolbar"] = true;
                 else
-                    usingBlizzyToolbar = false;
+                    settings["UseBlizzyToolbar"] = false;
 
-                readValue = settings.GetValue("WindowLocked");
+                readValue = node.GetValue("WindowLocked");
                 if (readValue != null && readValue.ToLower() == "true")
                     windowLocked = true;
                 else
                     windowLocked = false;
 
-                readValue = settings.GetValue("WindowShown");
+                readValue = node.GetValue("WindowShown");
                 if (readValue != null && readValue.ToLower() == "true")
                     windowShown = true;
                 else
                     windowShown = false;
 
-                readValue = settings.GetValue("WindowX");
+                readValue = node.GetValue("WindowX");
                 if (readValue != null)
                 {
                     try
@@ -141,7 +140,7 @@ namespace TonyPartArranger
                     catch (OverflowException) { }
                 }
 
-                readValue = settings.GetValue("WindowY");
+                readValue = node.GetValue("WindowY");
                 if (readValue != null)
                 {
                     try
@@ -152,7 +151,7 @@ namespace TonyPartArranger
                     catch (OverflowException) { }
                 }
 
-                readValue = settings.GetValue("WindowHeight");
+                readValue = node.GetValue("WindowHeight");
                 if (readValue != null)
                 {
                     try
@@ -165,7 +164,7 @@ namespace TonyPartArranger
 
                 foreach (PartCategories category in validCategories)
                 {
-                    List<string> partList = settings.GetValues(category.ToString()).ToList();
+                    List<string> partList = node.GetValues(category.ToString()).ToList();
                     SortedPart.ApplyOrder(category, partList);
                 }
             }

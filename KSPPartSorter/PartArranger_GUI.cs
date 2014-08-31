@@ -51,7 +51,6 @@ namespace TonyPartArranger
                 tooltipStyle.padding = new RectOffset(8, 0, 0, 0);
 
                 Rect tooltipRect = new Rect(windowRect.x, windowRect.y + windowRect.height, windowRect.width, 23);
-
                 GUI.Box(tooltipRect, tooltipText, tooltipStyle);
             }
 
@@ -69,13 +68,11 @@ namespace TonyPartArranger
                 selectedPart = SortedPart.FindByCategory(CurrentCategory()).First();
 
             if (GUI.Button(new Rect(windowRect.width - 54, 3, 24, 24), (windowLocked ? new GUIContent(buttonTextures["Locked"], "Unlock window") : new GUIContent(buttonTextures["Unlocked"], "Lock window"))))
-            {
                 windowLocked = !windowLocked;
-            }
 
             if (GUI.Button(new Rect(windowRect.width - 27, 3, 24, 24), buttonTextures["Close"]))
             {
-                if (usingBlizzyToolbar_AndAvailable)
+                if (usingBlizzyToolbar)
                     blizzyButton.TexturePath = pluginDir + "/icons/BlizzyIconOff";
                 else
                     appButton.SetFalse();
@@ -140,9 +137,7 @@ namespace TonyPartArranger
                 {
                     upButtonPressed = true;
                     if (buttonClickTime == 0.0F)
-                    {
                         MovePart(selectedPart, MoveDirection.Up);
-                    }
                     else if (isButtonDelayed && buttonClickTime > moveRepeatDelay)
                     {
                         buttonClickTime = 0.0F;
@@ -164,9 +159,7 @@ namespace TonyPartArranger
                 {
                     downButtonPressed = true;
                     if (buttonClickTime == 0.0F)
-                    {
                         MovePart(selectedPart, MoveDirection.Down);
-                    }
                     else if (isButtonDelayed && buttonClickTime > moveRepeatDelay)
                     {
                         buttonClickTime = 0.0F;

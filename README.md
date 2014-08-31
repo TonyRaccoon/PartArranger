@@ -21,6 +21,8 @@ Removing a part mod will not break anything and won't alter the order of other p
 Config File Values
 ==================
 
+*Note: you must load up the VAB or SPH to generate config.txt for the first time*
+
 * **WindowX**: saved horizontal window position
 * **WindowY**: saved vertical window position
 * **WindowHeight**: saved window height

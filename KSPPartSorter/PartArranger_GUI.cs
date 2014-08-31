@@ -11,8 +11,8 @@ namespace TonyPartArranger
         /// </summary>
         public void OnGUI()
         {
-            // If we don't need to draw the window then don't continue...
-            if (!windowShown) return;
+            if (!windowShown || (Boolean)settings["HidePlugin"])
+                return;
 
             GUI.skin = HighLogic.Skin;
 
@@ -205,6 +205,9 @@ namespace TonyPartArranger
         /// </summary>
         public void PreventEditorClickthrough()
         {
+            if (!windowShown || (Boolean)settings["HidePlugin"])
+                return;
+
             bool mouseInWindow = windowRect.Contains(new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y)) && windowShown;
 
             if (!lockedEditor && mouseInWindow)

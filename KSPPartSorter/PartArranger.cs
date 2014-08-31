@@ -76,58 +76,60 @@ namespace TonyPartArranger
             validCategories.Add(PartCategories.Utility);
             validCategories.Add(PartCategories.Science);
 
-            buttonTextures.Add("CatPods", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatPods", false));
-            buttonTextures.Add("CatPropulsion", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatPropulsion", false));
-            buttonTextures.Add("CatControl", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatControl", false));
-            buttonTextures.Add("CatStructural", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatStructural", false));
-            buttonTextures.Add("CatAero", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatAero", false));
-            buttonTextures.Add("CatUtility", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatUtility", false));
-            buttonTextures.Add("CatScience", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatScience", false));
-            buttonTextures.Add("MoveTop", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveTop", false));
-            buttonTextures.Add("MoveUp", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveUp", false));
-            buttonTextures.Add("MoveDown", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveDown", false));
-            buttonTextures.Add("MoveBottom", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveBottom", false));
-            buttonTextures.Add("MoveReset", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveReset", false));
-            buttonTextures.Add("Toolbar", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ToolbarIcon", false));
-            buttonTextures.Add("Locked", GameDatabase.Instance.GetTexture(pluginDir + "/icons/Locked", false));
-            buttonTextures.Add("Unlocked", GameDatabase.Instance.GetTexture(pluginDir + "/icons/Unlocked", false));
-            buttonTextures.Add("Close", GameDatabase.Instance.GetTexture(pluginDir + "/icons/Close", false));
-            buttonTextures.Add("ButtonBGOn", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGOn", false));
-            buttonTextures.Add("ButtonBGOff", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGOff", false));
-            buttonTextures.Add("ButtonBGActive", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGActive", false));
-            buttonTextures.Add("ButtonBGHover", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGHover", false));
-
-            buttonTextures.Add("CursorResizeNS", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CursorResizeNS", false));
-
             SortedPart.Init();
             LoadSettings();
             selectedPart = SortedPart.FindByCategory(PartCategories.Pods).First();
             RefreshPartList();
 
-            GameEvents.onGUIAstronautComplexSpawn.Add(OnAstroComplexShown);
-            GameEvents.onGUIAstronautComplexDespawn.Add(OnAstroComplexHidden);
-
             usingBlizzyToolbar = (Boolean)settings["UseBlizzyToolbar"] && ToolbarManager.ToolbarAvailable;
-            
-            if (usingBlizzyToolbar)
-            {
-                blizzyButton = ToolbarManager.Instance.add("TonyPartArranger", "PartArrangerButton");
-                blizzyButton.TexturePath = pluginDir + "/icons/BlizzyIconOff";
-                blizzyButton.ToolTip = "Show or hide PartArranger";
-                blizzyButton.Visibility = new GameScenesVisibility(GameScenes.EDITOR, GameScenes.SPH);
-                blizzyButton.OnClick += (e) =>
-                {
-                    if (windowShown)
-                        ToolbarHide();
-                    else
-                        ToolbarShow();
-                };
 
-                if (windowShown)
-                    blizzyButton.TexturePath = pluginDir + "/icons/BlizzyIconOn";
+            if (!(Boolean)settings["HidePlugin"])
+            {
+                buttonTextures.Add("CatPods", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatPods", false));
+                buttonTextures.Add("CatPropulsion", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatPropulsion", false));
+                buttonTextures.Add("CatControl", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatControl", false));
+                buttonTextures.Add("CatStructural", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatStructural", false));
+                buttonTextures.Add("CatAero", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatAero", false));
+                buttonTextures.Add("CatUtility", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatUtility", false));
+                buttonTextures.Add("CatScience", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CatScience", false));
+                buttonTextures.Add("MoveTop", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveTop", false));
+                buttonTextures.Add("MoveUp", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveUp", false));
+                buttonTextures.Add("MoveDown", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveDown", false));
+                buttonTextures.Add("MoveBottom", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveBottom", false));
+                buttonTextures.Add("MoveReset", GameDatabase.Instance.GetTexture(pluginDir + "/icons/MoveReset", false));
+                buttonTextures.Add("Toolbar", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ToolbarIcon", false));
+                buttonTextures.Add("Locked", GameDatabase.Instance.GetTexture(pluginDir + "/icons/Locked", false));
+                buttonTextures.Add("Unlocked", GameDatabase.Instance.GetTexture(pluginDir + "/icons/Unlocked", false));
+                buttonTextures.Add("Close", GameDatabase.Instance.GetTexture(pluginDir + "/icons/Close", false));
+                buttonTextures.Add("ButtonBGOn", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGOn", false));
+                buttonTextures.Add("ButtonBGOff", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGOff", false));
+                buttonTextures.Add("ButtonBGActive", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGActive", false));
+                buttonTextures.Add("ButtonBGHover", GameDatabase.Instance.GetTexture(pluginDir + "/icons/ButtonBGHover", false));
+                buttonTextures.Add("CursorResizeNS", GameDatabase.Instance.GetTexture(pluginDir + "/icons/CursorResizeNS", false));
+
+                GameEvents.onGUIAstronautComplexSpawn.Add(OnAstroComplexShown);
+                GameEvents.onGUIAstronautComplexDespawn.Add(OnAstroComplexHidden);
+
+                if (usingBlizzyToolbar)
+                {
+                    blizzyButton = ToolbarManager.Instance.add("TonyPartArranger", "PartArrangerButton");
+                    blizzyButton.TexturePath = pluginDir + "/icons/BlizzyIconOff";
+                    blizzyButton.ToolTip = "Show or hide PartArranger";
+                    blizzyButton.Visibility = new GameScenesVisibility(GameScenes.EDITOR, GameScenes.SPH);
+                    blizzyButton.OnClick += (e) =>
+                    {
+                        if (windowShown)
+                            ToolbarHide();
+                        else
+                            ToolbarShow();
+                    };
+
+                    if (windowShown)
+                        blizzyButton.TexturePath = pluginDir + "/icons/BlizzyIconOn";
+                }
+                else
+                    GameEvents.onGUIApplicationLauncherReady.Add(ApplicationLauncherReady);
             }
-            else
-                GameEvents.onGUIApplicationLauncherReady.Add(ApplicationLauncherReady);
 
             print("[PartArranger] Loaded version '" + pluginVersion + "'");
         }
@@ -137,6 +139,9 @@ namespace TonyPartArranger
         /// </summary>
         public void Update()
         {
+            if ((Boolean)settings["HidePlugin"])
+                return;
+
             // Fix reversed y position in mouse coordinates
             Vector3 mousePos = Input.mousePosition;
             mousePos.y = Screen.height - mousePos.y;
@@ -166,8 +171,6 @@ namespace TonyPartArranger
 
             if (windowRect.height < minimumHeight)
                 windowRect.height = minimumHeight;
-
-
         }
 
         /// <summary>
@@ -187,17 +190,21 @@ namespace TonyPartArranger
         public void OnDestroy()
         {
             SaveSettings();
-            EditorLogic.fetch.Unlock("PartArrangerLock"); // Unlock the editor, just in case
 
-            GameEvents.onGUIAstronautComplexSpawn.Remove(OnAstroComplexShown);
-            GameEvents.onGUIAstronautComplexDespawn.Remove(OnAstroComplexHidden);
-
-            if (usingBlizzyToolbar)
-                blizzyButton.Destroy();
-            else
+            if (!(Boolean)settings["HidePlugin"])
             {
-                ApplicationLauncher.Instance.RemoveModApplication(appButton);
-                GameEvents.onGUIApplicationLauncherReady.Remove(ApplicationLauncherReady);
+                EditorLogic.fetch.Unlock("PartArrangerLock"); // Unlock the editor, just in case
+
+                GameEvents.onGUIAstronautComplexSpawn.Remove(OnAstroComplexShown);
+                GameEvents.onGUIAstronautComplexDespawn.Remove(OnAstroComplexHidden);
+
+                if (usingBlizzyToolbar)
+                    blizzyButton.Destroy();
+                else
+                {
+                    ApplicationLauncher.Instance.RemoveModApplication(appButton);
+                    GameEvents.onGUIApplicationLauncherReady.Remove(ApplicationLauncherReady);
+                }
             }
         }
 

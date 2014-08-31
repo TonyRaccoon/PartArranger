@@ -90,6 +90,7 @@ namespace TonyPartArranger
             node.AddValue("WindowHeight", windowRect.height);
             node.AddValue("WindowLocked", windowLocked);
             node.AddValue("WindowShown", windowShown);
+            node.AddValue("HidePlugin", settings["HidePlugin"]);
             node.AddValue("UseBlizzyToolbar", settings["UseBlizzyToolbar"]);
 
             foreach (PartCategories category in validCategories)
@@ -128,6 +129,12 @@ namespace TonyPartArranger
                     windowShown = true;
                 else
                     windowShown = false;
+
+                readValue = node.GetValue("HidePlugin");
+                if (readValue != null && readValue.ToLower() == "true")
+                    settings["HidePlugin"] = true;
+                else
+                    settings["HidePlugin"] = false;
 
                 readValue = node.GetValue("WindowX");
                 if (readValue != null)

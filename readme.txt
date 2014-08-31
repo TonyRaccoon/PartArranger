@@ -1,9 +1,9 @@
-Part Arranger
+PartArranger
 Version: 1
 
 === Installation ===
 
-Place the PartArranger folder inside of Kerbal Space Program/GameData
+Place the PartArranger folder inside of Kerbal Space Program/GameData. Load up the editor (VAB or SPH) once to generate a default configuration file at Kerbal Space Program/GameData/PartArranger/config.txt. See below for possible configuration options.
 
 === Usage ===
 

@@ -22,5 +22,6 @@ WindowY: saved vertical window position
 WindowHeight: saved window height
 WindowLocked: whether the window is currently locked
 WindowShown: whether the window is currently shown
+HidePlugin: if true, hides the plugin entirely and only applies sorting
 UseBlizzyToolbar: if true, adds a button to Blizzy's Toolbar instead of KSP's default toolbar if available
 Everything else: a sorted list of every part

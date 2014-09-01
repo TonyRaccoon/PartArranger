@@ -6,6 +6,10 @@ You can resize the window by dragging the bottom edge of the window up or down. 
 
 Removing a part mod will not break anything and won't alter the order of other parts. Newly added parts will appear at the end of their categories.
 
+Curse page: [http://www.curse.com/ksp-mods/kerbal/223902-partarranger](http://www.curse.com/ksp-mods/kerbal/223902-partarranger)  
+KSP forum thread: [http://forum.kerbalspaceprogram.com/threads/92511](http://forum.kerbalspaceprogram.com/threads/92511)  
+KerbalStuff page: [http://beta.kerbalstuff.com/mod/128/PartArranger](http://beta.kerbalstuff.com/mod/128/PartArranger)  
+
 Installation
 ============
 Place the PartArranger folder inside of Kerbal Space Program/GameData. Load up the editor (VAB or SPH) once to generate a default configuration file at Kerbal Space Program/GameData/PartArranger/config.txt. See below for possible configuration options.

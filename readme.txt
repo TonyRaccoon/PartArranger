@@ -1,5 +1,5 @@
 PartArranger
-Version: 1.0
+Version: 1.1
 
 PartArranger allows you to sort the VAB/SPH part list any way you want. By default, it attaches to Blizzy's toolbar if it's installed, or the stock toolbar otherwise. You can tell it which toolbar to use in config.txt (generated after you enter the VAB/SPH for the first time). Fully compatible with PartCatalog.
 

@@ -139,8 +139,8 @@ namespace TonyPartArranger
         /// </summary>
         public void Update()
         {
-            if ((Boolean)settings["HidePlugin"])
-                return;
+            if ((Boolean)settings["HidePlugin"] || !windowShown)
+                return; // Don't handle resizing if the plugin is hidden or if the window isn't being shown
 
             // Fix reversed y position in mouse coordinates
             Vector3 mousePos = Input.mousePosition;

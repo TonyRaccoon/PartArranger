@@ -12,7 +12,7 @@ KerbalStuff page: [http://beta.kerbalstuff.com/mod/128/PartArranger](http://beta
 
 Installation
 ============
-Place the PartArranger folder inside of Kerbal Space Program/GameData. Load up the editor (VAB or SPH) once to generate a default configuration file at Kerbal Space Program/GameData/PartArranger/config.txt. See below for possible configuration options.
+Place the PartArranger folder inside of Kerbal Space Program/GameData. Load up the VAB or SPH once to generate a default configuration file at Kerbal Space Program/GameData/PartArranger/config.txt. See below for possible configuration options.
 
 Config File Values
 ==================

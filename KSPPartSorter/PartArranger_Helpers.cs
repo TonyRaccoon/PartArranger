@@ -107,9 +107,11 @@ namespace TonyPartArranger
         /// </summary>
         public void LoadSettings()
         {
+            String configPath = KSPUtil.ApplicationRootPath + "Gamedata/" + pluginDir + "/config.txt";
+
             try // ConfigNode.Load throws a NullReferenceException on a missing or blank file
             {
-                ConfigNode node = ConfigNode.Load(KSPUtil.ApplicationRootPath + "Gamedata/" + pluginDir + "/config.txt");
+                ConfigNode node = ConfigNode.Load(configPath);
                 String readValue;
 
                 readValue = node.GetValue("UseBlizzyToolbar");
@@ -178,6 +180,10 @@ namespace TonyPartArranger
             catch (NullReferenceException)
             {
                 print("[PartArranger] Missing or blank config file");
+
+                // Add the values that would normally be added by reading the config file
+                settings.Add("UseBlizzyToolbar", true);
+                settings.Add("HidePlugin", false);
             }
         }
     }

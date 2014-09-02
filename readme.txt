@@ -12,6 +12,7 @@ Removing a part mod will not break anything and won't alter the order of other p
 Curse page: http://www.curse.com/ksp-mods/kerbal/223902-partarranger
 KSP forum thread: http://forum.kerbalspaceprogram.com/threads/92511
 KerbalStuff page: http://beta.kerbalstuff.com/mod/128/PartArranger
+Source code: https://github.com/tony311/PartArranger
 
 === Installation ===
 

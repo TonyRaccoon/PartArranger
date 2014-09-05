@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,6 +7,15 @@ namespace TonyPartArranger
 {
     public partial class PartArranger : MonoBehaviour
     {
+        /// <summary>
+        /// Defines available cursor types
+        /// </summary>
+        public enum CursorType
+        {
+            ResizeNS,
+            Default
+        }
+
         /// <summary>
         /// Runs when the plugin should render its UI
         /// </summary>
@@ -32,7 +42,7 @@ namespace TonyPartArranger
             buttonStyles["Part"].hover.background = (Texture2D)buttonTextures["ButtonBGHover"];
             buttonStyles["Part"].fontStyle = FontStyle.Normal;
             buttonStyles["Part"].alignment = TextAnchor.MiddleLeft;
-            buttonStyles["Part"].padding = new RectOffset(5, 0, 0, 0);
+            buttonStyles["Part"].padding = new RectOffset(5, 0, 4, 0);
 
             // Used for the currently selected part in the part list
             buttonStyles["PartActive"] = new GUIStyle(buttonStyles["Part"]);
@@ -104,15 +114,60 @@ namespace TonyPartArranger
             partScrollPosition = GUI.BeginScrollView(new Rect(8, 68, 290, windowRect.height - 73), partScrollPosition, new Rect(0, 0, 271, viewHeight));
             if (IsCategoryValid(CurrentCategory()))
             {
-                GUI.skin = null;
-                int y = 3;
-                foreach (SortedPart part in SortedPart.FindByCategory(CurrentCategory()))
+                if (draggedPart != null && drawingDrag)
                 {
-                    if (GUI.Button(new Rect(3, y, 268, 20), part.Title, (part.Name == selectedPart.Name ? buttonStyles["PartActive"] : buttonStyles["Part"])))
-                        selectedPart = SortedPart.FindByName(part.Name);
-                    y += 23;
+                    foreach (SortedPart part in SortedPart.FindByCategory(CurrentCategory()))
+                    {
+                        if (part != draggedPart) // Don't draw the part we're dragging
+                        {
+                            Rect position = part.ButtonPosition;
+
+                            if (draggedPart.CursorPosition < draggedPart.Position) // handle parts below empty
+                            {
+                                if (part.Position >= draggedPart.CursorPosition && part.Position < draggedPart.Position)
+                                    position.y += 23;
+                            }
+                            else if (draggedPart.CursorPosition > draggedPart.Position) // handle parts above empty
+                            {
+                                if (part.Position <= draggedPart.CursorPosition && part.Position > draggedPart.Position)
+                                    position.y -= 23;
+                            }
+
+                            if (GUI.Button(position, part.Title, buttonStyles["Part"]))
+                                selectedPart = part;
+                        }
+                    }
+
+                    // Draw dragged part
+                    Rect dragPosition = draggedPart.ButtonPosition;
+                    dragPosition.y = Mouse.screenPos.y - windowRect.y + partScrollPosition.y - 68 - 10;
+
+                    if (dragPosition.y < 3)
+                        dragPosition.y = 3;
+                    else if (dragPosition.y > (SortedPart.FindByCategory(CurrentCategory()).Count-1)*23+3)
+                        dragPosition.y = (SortedPart.FindByCategory(CurrentCategory()).Count-1)*23+3;
+
+                    if (GUI.Button(dragPosition, draggedPart.Title, buttonStyles["PartActive"]))
+                        return; // Don't do anything if it's actually clicked
+
+                    /*** Scroll view up/down when dragging a part near the edges ***/
+                    // Fix reversed y position in mouse coordinates
+                    Vector3 mousePos = Input.mousePosition;
+                    mousePos.y = Screen.height - mousePos.y;
+
+                    if (mousePos.y > windowRect.y + 68 + (windowRect.height - 73) - 46)
+                        partScrollPosition.y += (mousePos.y - (windowRect.y + 68 + (windowRect.height - 73) - 46))/10;
+                    else if (mousePos.y < windowRect.y + 68 + 3 + 46)
+                        partScrollPosition.y -= ((windowRect.y + 68 + 3 + 46) - mousePos.y)/10;
                 }
-                GUI.skin = HighLogic.Skin;
+                else
+                {
+                    foreach (SortedPart part in SortedPart.FindByCategory(CurrentCategory()))
+                    {
+                        if (GUI.Button(part.ButtonPosition, new GUIContent(part.Title, "Drag up or down to move"), (part.Name == selectedPart.Name ? buttonStyles["PartActive"] : buttonStyles["Part"])))
+                            selectedPart = part;
+                    }
+                }
             }
 
             if (needToScroll)
@@ -194,7 +249,7 @@ namespace TonyPartArranger
                 tooltipText = GUI.tooltip;
 
             // Register the window for mouse dragging
-            if (!windowLocked && !resizing)
+            if (!windowLocked && !resizing && draggedPart == null)
                 GUI.DragWindow();
             //GUI.DragWindow(new Rect(0,0,windowRect.width,27)); // Titlebar only
         }
@@ -221,6 +276,18 @@ namespace TonyPartArranger
                 EditorLogic.fetch.Unlock("PartArrangerLock");
                 lockedEditor = false;
             }
+        }
+
+        /// <summary>
+        /// Sets the cursor texture
+        /// </summary>
+        /// <param name="type"></param>
+        public void SetCursor(CursorType type)
+        {
+            if (type == CursorType.ResizeNS)
+                Cursor.SetCursor((Texture2D)buttonTextures["CursorResizeNS"], new Vector2(11, 11), CursorMode.ForceSoftware);
+            else if (type == CursorType.Default)
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
     }
 }

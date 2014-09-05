@@ -32,8 +32,6 @@ namespace TonyPartArranger
     {
         private String pluginVersion = "1.1.1";
         private SortedPart selectedPart;
-        private Rect windowRect = new Rect((Screen.width) / 2 - 358 / 2, Screen.height / 2 - 600 / 2, 347, 444);
-        private Vector2 partScrollPosition = new Vector2(0, 0);
         private Boolean windowShown = false;
         private Boolean windowShown_Astro = false;
         private Boolean windowLocked = false;
@@ -43,7 +41,6 @@ namespace TonyPartArranger
         private float buttonClickTime = 0.0F;
         private Boolean isButtonDelayed = true;
         private String tooltipText = "";
-        public List<PartCategories> validCategories = new List<PartCategories>();
         private Boolean usingBlizzyToolbar;
         private IButton blizzyButton;
         private ApplicationLauncherButton appButton;
@@ -54,7 +51,13 @@ namespace TonyPartArranger
         private int originalMousePosition;
         private Boolean resizing = false;
         private Dictionary<String, object> settings = new Dictionary<String, object>();
+        private SortedPart draggedPart;
+        private Boolean drawingDrag = false;
+        private float dragStart;
+        public List<PartCategories> validCategories = new List<PartCategories>();
 
+        private static Rect windowRect = new Rect((Screen.width) / 2 - 358 / 2, Screen.height / 2 - 600 / 2, 347, 444);
+        private static Vector2 partScrollPosition = new Vector2(0, 0);
         private static List<AvailablePart> stockPartList;
 
         // Configurable variables
@@ -140,11 +143,42 @@ namespace TonyPartArranger
         public void Update()
         {
             if ((Boolean)settings["HidePlugin"] || !windowShown)
-                return; // Don't handle resizing if the plugin is hidden or if the window isn't being shown
+                return; // Don't handle resizing/dragging if the plugin is hidden or if the window isn't being shown
 
             // Fix reversed y position in mouse coordinates
             Vector3 mousePos = Input.mousePosition;
             mousePos.y = Screen.height - mousePos.y;
+
+        /*** Dragging ***/
+
+            if (Input.GetMouseButtonDown(0) && windowRect.Contains(mousePos)) // If we clicked inside the window
+            {
+                SortedPart hoveredPart = SortedPart.FindByCategory(CurrentCategory()).Find(x => x.ButtonScreenPosition.Expand(0,0,0,3).Contains(mousePos));
+                if (hoveredPart != null)
+                {
+                    draggedPart = hoveredPart;
+                    selectedPart = hoveredPart;
+                    dragStart = mousePos.y;
+                }
+            }
+
+            if (Input.GetMouseButtonUp(0) && draggedPart != null) // If we were dragging something and just dropped it
+            {
+                int newPosition = draggedPart.CursorPosition;
+                SortedPart.SortedPartCategories[CurrentCategory()].RemoveAt(draggedPart.Position);
+                SortedPart.SortedPartCategories[CurrentCategory()].Insert(newPosition, draggedPart);
+                draggedPart = null;
+                drawingDrag = false;
+                RefreshPartList();
+            }
+
+            if (draggedPart != null && !drawingDrag) // If we have a part ready to drag, but haven't started drawing the drag yet
+            {
+                if (Math.Abs(dragStart - mousePos.y) > 10)
+                    drawingDrag = true;
+            }
+
+        /*** Resizing ***/
 
             Boolean cursorInZone = new Rect(windowRect.x, windowRect.yMax - 5, windowRect.width, 5).Contains(mousePos);
 
@@ -153,18 +187,19 @@ namespace TonyPartArranger
                 resizing = true;
                 originalWindowHeight = (int)windowRect.height;
                 originalMousePosition = (int)Mouse.screenPos.y;
-                Cursor.SetCursor((Texture2D)buttonTextures["CursorResizeNS"], new Vector2(11, 11), CursorMode.ForceSoftware);
+                SetCursor(CursorType.ResizeNS);
             }
             else if (Input.GetMouseButtonUp(0) && resizing)
             {
                 resizing = false;
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                SetCursor(CursorType.Default);
             }
 
-            if (cursorInZone && !windowLocked)
-                Cursor.SetCursor((Texture2D)buttonTextures["CursorResizeNS"], new Vector2(11, 11), CursorMode.ForceSoftware);
+            if ((cursorInZone && !windowLocked && draggedPart == null && !drawingDrag)
+                || drawingDrag) // Set cursor to ResizeNS if we're hovering over the bottom edge of the window, or dragging a part up/down
+                SetCursor(CursorType.ResizeNS);
             else if (!cursorInZone && !resizing)
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                SetCursor(CursorType.Default);
 
             if (resizing && windowRect.height >= minimumHeight)
                 windowRect.height = originalWindowHeight - (originalMousePosition - Mouse.screenPos.y);

@@ -53,6 +53,56 @@ namespace TonyPartArranger
             }
 
             /// <summary>
+            /// Returns what this part's position would be if its button were positioned at the cursor
+            /// </summary>
+            public int CursorPosition
+            {
+                get
+                {
+                    int mouseY = (int)Mouse.screenPos.y - (int)windowRect.y + (int)partScrollPosition.y - 68;
+                    int position = mouseY / 23;
+                    int thisCatCount = SortedPart.FindByCategory(this.Category).Count;
+
+
+                    return (position < 0) ? 0 : (position > thisCatCount - 1) ? thisCatCount - 1 : position;
+                }
+            }
+
+            /// <summary>
+            /// Returns this part's button's position relative to the ScrollView
+            /// </summary>
+            public Rect ButtonPosition
+            {
+                get { return new Rect(3, (this.Position * 23) + 3, 268, 20); }
+            }
+
+            /// <summary>
+            /// Returns this part's button's position in screen coordinates
+            /// </summary>
+            public Rect ButtonScreenPosition
+            {
+                get
+                {
+
+                    int x = 3;
+                    int y = this.Position * 23 + 3;
+
+                    // Handle scrollview
+                    y -= (int)partScrollPosition.y;
+
+                    // Convert to windowRect coordinates
+                    x += 8;
+                    y += 68;
+
+                    // Convert to screen coordinates
+                    x += (int)windowRect.x;
+                    y += (int)windowRect.y;
+
+                    return new Rect(x, y, 268, 20);
+                }
+            }
+
+            /// <summary>
             /// Returns the internal part sort dictionary
             /// </summary>
             public static Dictionary<PartCategories, List<SortedPart>> SortedPartCategories

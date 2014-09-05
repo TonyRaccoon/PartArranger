@@ -67,7 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ListExtensions.cs" />
+    <Compile Include="ClassExtensions.cs" />
     <Compile Include="PartArranger.cs" />
     <Compile Include="PartArranger_GUI.cs" />
     <Compile Include="PartArranger_Helpers.cs" />

@@ -30,7 +30,7 @@ namespace TonyPartArranger
     [KSPAddon(KSPAddon.Startup.EditorAny, false)] // Makes the plugin only load in the VAB and SPH
     public partial class PartArranger : MonoBehaviour
     {
-        private String pluginVersion = "1.1.1";
+        private String pluginVersion = "1.2";
         private SortedPart selectedPart;
         private Boolean windowShown = false;
         private Boolean windowShown_Astro = false;

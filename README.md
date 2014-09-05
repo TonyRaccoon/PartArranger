@@ -1,6 +1,6 @@
 PartArranger allows you to sort the VAB/SPH part list any way you want. By default, it attaches to [Blizzy's toolbar](http://forum.kerbalspaceprogram.com/threads/60863) if it's installed, or the stock toolbar otherwise. You can tell it which toolbar to use in config.txt (generated after you enter the VAB/SPH for the first time). Fully compatible with [PartCatalog](http://forum.kerbalspaceprogram.com/threads/35018).
 
-When you are in either the VAB or the SPH, click the toolbar icon (two arrows, one facing up and one facing down) to show or hide the window. Select a category, then select a part in the list to move. Then click one of the buttons on the right to move it up, down, or to the top or bottom of the category. If you hold the up/down button for a second, it'll start quickly moving the part up or down.
+When you are in either the VAB or the SPH, click the toolbar icon (two arrows, one facing up and one facing down) to show or hide the window. Select a category, then select a part in the list to move. Then click one of the buttons on the right to move it up, down, or to the top or bottom of the category. If you hold the up/down button for a second, it'll start quickly moving the part up or down. You can also move parts up or down by dragging them with the cursor.
 
 You can resize the window by dragging the bottom edge of the window up or down. You can lock the window in place and disable resizing by clicking on the padlock icon in the top-right corner.
 
